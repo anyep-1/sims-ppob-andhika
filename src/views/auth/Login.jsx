@@ -1,11 +1,15 @@
 import { useDispatch } from "react-redux";
+import { useState } from "react";
 import { handleLogin } from "../../controllers/authController";
+import { MdLock } from "react-icons/md";
+import { FiAtSign, FiEye, FiEyeOff } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import logo from "../../assets/Logo.png";
 import illustration from "../../assets/Illustrasi Login.png";
 
 export default function Login() {
   const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -17,69 +21,89 @@ export default function Login() {
   };
 
   return (
-    // PAGE WRAPPER
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      {/* CARD */}
-      <div className="bg-white w-[900px] h-[520px] rounded-lg shadow-lg grid grid-cols-2 overflow-hidden">
-        {/* ================= LEFT (FORM) ================= */}
-        <div className="flex flex-col justify-center px-16">
-          {/* Logo */}
-          <div className="flex items-center gap-2 mb-8 justify-center">
-            <img src={logo} alt="SIMS PPOB" className="w-8 h-8" />
-            <span className="font-semibold text-lg">SIMS PPOB</span>
-          </div>
+    <div className="min-h-screen grid grid-cols-2">
+      {/* ================= LEFT (FORM) ================= */}
+      <div className="flex flex-col justify-center px-24 bg-white">
+        {/* Logo */}
+        <div className="flex items-center gap-2 mb-10 justify-center">
+          <img src={logo} alt="SIMS PPOB" className="w-8 h-8" />
+          <span className="font-semibold text-lg">SIMS PPOB</span>
+        </div>
 
-          {/* Title */}
-          <h1 className="flex text-2xl font-bold mb-8 leading-snug justify-center">
-            Masuk atau buat akun <br />
-            untuk memulai
-          </h1>
+        {/* Title */}
+        <h1 className="text-2xl font-bold mb-8 leading-snug text-center">
+          Masuk atau buat akun <br />
+          untuk memulai
+        </h1>
 
-          {/* Form */}
-          <form className="space-y-5">
+        {/* Form */}
+        <form className="space-y-5 w-full h-auto mx-auto" onSubmit={onSubmit}>
+          {/* EMAIL */}
+          <div className="relative">
+            <FiAtSign
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={18}
+            />
             <input
               type="email"
+              name="email"
               placeholder="masukan email anda"
-              className="w-full border border-gray-300 rounded px-4 py-3 text-sm
+              className="w-full border border-gray-300 rounded px-4 py-3 pl-9 text-sm
                          focus:outline-none focus:ring-2 focus:ring-red-500"
+              required
             />
+          </div>
 
+          {/* PASSWORD */}
+          <div className="relative">
+            <MdLock
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={18}
+            />
             <input
-              type="password"
-              placeholder="masukan password anda"
-              className="w-full border border-gray-300 rounded px-4 py-3 text-sm
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="masukan kata sandi anda"
+              className="w-full border border-gray-300 rounded px-4 py-3 pl-9 pr-9 text-sm
                          focus:outline-none focus:ring-2 focus:ring-red-500"
+              required
             />
-
             <button
-              type="submit"
-              className="w-full bg-red-600 text-white py-3 rounded
-                         font-semibold hover:bg-red-700 transition"
+              type="button"
+              onMouseDown={() => setShowPassword(true)}
+              onMouseUp={() => setShowPassword(false)}
+              onMouseLeave={() => setShowPassword(false)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
             >
-              Masuk
+              {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
             </button>
-          </form>
+          </div>
 
-          {/* Register */}
-          <p className="text-center text-sm mt-6">
-            belum punya akun?{" "}
-            <Link
-              to="/register"
-              className="text-red-600 font-semibold hover:underline"
-            >
-              registrasi di sini
-            </Link>
-          </p>
-        </div>
+          {/* BUTTON */}
+          <button
+            type="submit"
+            className="w-full bg-red-600 text-white py-3 rounded
+                       font-semibold hover:bg-red-700 transition"
+          >
+            Masuk
+          </button>
+        </form>
 
-        {/* ================= RIGHT (ILLUSTRATION) ================= */}
-        <div className="flex items-center justify-center bg-[#FFF5F5]">
-          <img
-            src={illustration}
-            alt="Login Illustration"
-            className="max-w-full"
-          />
-        </div>
+        {/* Register */}
+        <p className="text-gray-500 text-center text-xs mt-6">
+          belum punya akun? registrasi{" "}
+          <Link
+            to="/register"
+            className="text-red-600 font-semibold hover:underline"
+          >
+            di sini
+          </Link>
+        </p>
+      </div>
+
+      {/* ================= RIGHT (ILLUSTRATION) ================= */}
+      <div className="flex items-center justify-center bg-[#FFF5F5]">
+        <img src={illustration} alt="Login Illustration" className="max-w-lg" />
       </div>
     </div>
   );

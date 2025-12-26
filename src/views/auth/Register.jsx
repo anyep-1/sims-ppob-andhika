@@ -1,12 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FiEye, FiEyeOff, FiAtSign } from "react-icons/fi";
 import { MdLock, MdPerson } from "react-icons/md";
 
 import logo from "../../assets/Logo.png";
 import illustration from "../../assets/Illustrasi Login.png";
-import { handleRegister } from "../../controllers/authController";
+import { register } from "../../models/auth/authSlice";
 import { isValidEmail, isStrongPassword } from "../../utils/validators";
 
 export default function Register() {
@@ -16,15 +16,9 @@ export default function Register() {
   const [formError, setFormError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { isLoading, isError, message } = useSelector((state) => state.auth);
+  const { isLoading } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (!isError && message === "Registrasi berhasil") {
-      navigate("/login");
-    }
-  }, [isError, message, navigate]);
-
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setFormError("");
     const email = e.target.email.value;
@@ -46,7 +40,12 @@ export default function Register() {
       last_name: e.target.last_name.value,
       password: password,
     };
-    handleRegister(dispatch, payload);
+    try {
+      await dispatch(register(payload)).unwrap();
+      navigate("/login");
+    } catch (err) {
+      console.log("Register gagal:", err);
+    }
   };
 
   return (
@@ -167,10 +166,6 @@ export default function Register() {
           </div>
           {formError && (
             <p className="text-red-500 text-sm text-center mt-2">{formError}</p>
-          )}
-
-          {isError && !formError && (
-            <p className="text-red-500 text-sm text-center mt-2">{message}</p>
           )}
 
           {/* BUTTON */}

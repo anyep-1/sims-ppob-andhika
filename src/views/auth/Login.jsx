@@ -1,23 +1,30 @@
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { handleLogin } from "../../controllers/authController";
+import { login } from "../../models/auth/authSlice";
 import { MdLock } from "react-icons/md";
 import { FiAtSign, FiEye, FiEyeOff } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/Logo.png";
 import illustration from "../../assets/Illustrasi Login.png";
 
 export default function Login() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const payload = {
       email: e.target.email.value,
       password: e.target.password.value,
     };
-    handleLogin(dispatch, payload);
+
+    try {
+      await dispatch(login(payload)).unwrap();
+      navigate("/home");
+    } catch (err) {
+      console.log("Login failed: ", err);
+    }
   };
 
   return (

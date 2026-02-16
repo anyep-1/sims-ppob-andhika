@@ -1,4 +1,4 @@
-import avatar from "../assets/avatar.png";
+import avatar from "../assets/Profile Photo.png";
 
 export default function ProfileSection() {
   return (

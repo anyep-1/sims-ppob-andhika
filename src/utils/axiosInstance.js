@@ -15,4 +15,16 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
+// Inceptors untuk menangani response error.
+// axiosInstance.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     if (error.response && error.response.status === 401) {
+//       localStorage.removeItem("token");
+//       window.location.href = "/login";
+//     }
+//     return Promise.reject(error);
+//   },
+// );
+
 export default axiosInstance;
